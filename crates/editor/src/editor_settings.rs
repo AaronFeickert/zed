@@ -105,7 +105,7 @@ pub struct Scrollbar {
     pub git_diff: bool,
     pub selected_symbol: bool,
     pub search_results: bool,
-    pub diagnostics: bool,
+    pub diagnostics: ScrollbarDiagnostics,
     pub cursors: bool,
     pub axes: ScrollbarAxes,
 }
@@ -148,6 +148,24 @@ pub struct ScrollbarAxes {
     ///
     /// Default: true
     pub vertical: bool,
+}
+
+/// Which diagnostic indicators to show in the scrollbar.
+///
+/// Default: all
+#[derive(Copy, Clone, Debug, Serialize, Deserialize, JsonSchema, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum ScrollbarDiagnostics {
+    /// Show all diagnostic levels: hint, information, warnings, error.
+    All,
+    /// Show only the following diagnostic levels: information, warning, error.
+    Information,
+    /// Show only the following diagnostic levels: warning, error.
+    Warning,
+    /// Show only the following diagnostic level: error.
+    Error,
+    /// Do not show diagnostics.
+    None,
 }
 
 /// The key to use for adding multiple cursors
@@ -348,10 +366,10 @@ pub struct ScrollbarContent {
     ///
     /// Default: true
     pub selected_symbol: Option<bool>,
-    /// Whether to show diagnostic indicators in the scrollbar.
+    /// Which diagnostic indicators to show in the scrollbar.
     ///
-    /// Default: true
-    pub diagnostics: Option<bool>,
+    /// Default: all
+    pub diagnostics: Option<ScrollbarDiagnostics>,
     /// Whether to show cursor positions in the scrollbar.
     ///
     /// Default: true
